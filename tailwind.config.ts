@@ -1,3 +1,5 @@
+// Controls design tokens and which files Tailwind processes. 
+
 import type { Config } from "tailwindcss";
 
 export default {

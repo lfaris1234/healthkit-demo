@@ -2,6 +2,8 @@
   "name": "healthkit-demo",
   "private": true,
   "version": "1.0.0",
+  "author": "Lily Faris <lilymfaris@gmail.com>",
+
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -1,11 +1,13 @@
+import Link from "next/link";
+
 export default function Header() {
   return (
-    <header className="px-4 py-3 border-b">
-      <div className="max-w-5xl mx-auto flex items-center justify-between">
-        <a href="/" className="font-semibold">HealthKit</a>
+    <header className="border-b">
+      <div className="mx-auto flex max-w-screen-sm items-center justify-between px-4 py-3">
+        <Link href="/" className="font-semibold">WellWise</Link>
         <nav className="text-sm space-x-4">
-          <a href="/(auth)/sign-up">Sign up</a>
-          <a href="/(auth)/login">Log in</a>
+          <Link href="/(auth)/sign-up">Sign up</Link>
+          <Link href="/(auth)/login">Log in</Link>
         </nav>
       </div>
     </header>
