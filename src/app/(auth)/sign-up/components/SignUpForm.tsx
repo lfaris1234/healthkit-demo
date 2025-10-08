@@ -6,11 +6,13 @@ import { useAuthContext } from "@/context/AuthContext";
 
 type Form = {
   name: string;
+  age: string; 
   email: string;
   password: string;
   confirm: string;
   agree: boolean;
 };
+
 
 const emailOk = (e: string) => /^\S+@\S+\.\S+$/.test(e);
 const pwOk = (p: string) => p.length >= 8;
@@ -18,15 +20,17 @@ const pwOk = (p: string) => p.length >= 8;
 export default function SignUpForm() {
   const [form, setForm] = useState<Form>({
     name: "",
+    age: "",
     email: "",
     password: "",
     confirm: "",
     agree: false,
   });
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { setUser } = useAuthContext();
+  const { setUser, setProfile } = useAuthContext();
 
   const onChange =
     (k: keyof Form) =>
@@ -39,6 +43,7 @@ export default function SignUpForm() {
     const e: Record<string, string> = {};
     if (!form.name.trim()) e.name = "Please enter your name";
     if (!emailOk(form.email)) e.email = "Enter a valid email";
+    if (!form.age.trim()) e.age = "Please enter your age";
     if (!pwOk(form.password)) e.password = "At least 8 characters";
     if (form.password !== form.confirm) e.confirm = "Passwords do not match";
     if (!form.agree) e.agree = "Please accept the terms";
@@ -90,10 +95,16 @@ export default function SignUpForm() {
       }
 
       setUser(user);
+      setProfile((prev) => ({
+        ...prev,
+        name: user.name,
+        age: form.age,
+        // phone: form.phone,
+      }));
 
-      // persist name into shared profile for dashboard greeting
-      const existingProfile = JSON.parse(localStorage.getItem("profile") || "{}");
-      localStorage.setItem("profile", JSON.stringify({ ...existingProfile, name: user.name }));
+      // // persist name into shared profile for dashboard greeting
+      // const existingProfile = JSON.parse(localStorage.getItem("profile") || "{}");
+      // localStorage.setItem("profile", JSON.stringify({ ...existingProfile, name: user.name }));
 
       // always go to the next step
       router.push("/onboarding/non-required-questions");
@@ -113,7 +124,7 @@ export default function SignUpForm() {
         <span className="text-sm text-gray-700">Name</span>
         <input
           className="w-full rounded border p-2"
-          placeholder="Kelly Walters"
+          placeholder="Name"
           value={form.name}
           onChange={onChange("name")}
         />
@@ -121,10 +132,23 @@ export default function SignUpForm() {
       </label>
 
       <label className="grid gap-1">
+        <span className="text-sm text-gray-700">Age</span>
+        <input
+          className="w-full rounded border p-2"
+          placeholder="Age"
+          value={form.age}
+          onChange={onChange("age")}
+          inputMode="numeric"
+          pattern="\d*"
+        />
+        {errors.age && <span className="text-xs text-red-600">{errors.age}</span>}
+      </label>
+
+      <label className="grid gap-1">
         <span className="text-sm text-gray-700">Email</span>
         <input
           className="w-full rounded border p-2"
-          placeholder="kelly@example.com"
+          placeholder="you@example.com"
           value={form.email}
           onChange={onChange("email")}
           type="email"

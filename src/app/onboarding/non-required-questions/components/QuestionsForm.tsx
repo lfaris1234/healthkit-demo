@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuthContext } from "@/context/AuthContext";
+
 
 type Quick = { gender: "" | "Male" | "Female"; animalProtein: "" | "Yes" | "No" };
 type Detail = { dietary: string; conditions: string; medication: string; supplements: string; goals: string };
@@ -19,10 +21,25 @@ export default function QuestionsForm() {
   });
 
   const saveAndGo = () => {
-    localStorage.setItem("onboarding.quick", JSON.stringify(quick));
-    localStorage.setItem("onboarding.detail", JSON.stringify(detail));
+    // OPTIONAL: keep these two lines if you still want the extra demo keys
+    // localStorage.setItem("onboarding.quick", JSON.stringify(quick));
+    // localStorage.setItem("onboarding.detail", JSON.stringify(detail));
+
+    // merge onboarding answers into the canonical profile
+    setProfile((prev) => ({
+      ...prev,
+      gender: quick.gender,
+      animalProtein: quick.animalProtein,
+      dietary: detail.dietary,
+      conditions: detail.conditions,
+      medication: detail.medication,
+      supplements: detail.supplements,
+      goals: detail.goals,
+    }));
+
     router.push("/dashboard");
   };
+
 
   const pill = (active: boolean) =>
     `h-11 rounded-md border text-[15px] font-medium ${
@@ -30,6 +47,8 @@ export default function QuestionsForm() {
         ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
         : "border-gray-300 bg-white text-gray-900"
     }`;
+
+  const { setProfile } = useAuthContext();
 
   if (step === 1) {
     return (
