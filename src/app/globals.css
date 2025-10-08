@@ -2,13 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --color-primary: #255933; /* matches mock */
+:root{
+  --color-primary:rgb(0, 56, 112); /* navy */
+  --color-accent: #2C9CA6;  /* teal sign-up color */
+  --ring: rgba(10,37,64,.25);
 }
 
-/* default body type—cleaner tracking and size */
-html, body {
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  letter-spacing: 0.01em;
-}
+/* map font variables to utility classes */
+.font-headline{ font-family: var(--font-headline), Georgia, "Times New Roman", serif; }
+.font-sans{ font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; }
 

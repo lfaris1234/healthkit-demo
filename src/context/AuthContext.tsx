@@ -1,24 +1,20 @@
+// src/context/AuthContext.tsx
 "use client";
 
-import { createContext, useContext, useMemo, type ReactNode } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { createContext, useContext, useState } from "react";
 
-type AuthStore = ReturnType<typeof useAuth>;
+type User = { id: string; name: string; email: string } | null;
+type Ctx = { user: User; setUser: (u: User) => void };
 
-const AuthContext = createContext<AuthStore | null>(null);
+const AuthContext = createContext<Ctx | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const store = useAuth();
-  // rerender consumers only when something in store changes
-  const value = useMemo(() => store, [store.user]); 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User>(null);
+  return <AuthContext.Provider value={{ user, setUser }}>{children}</AuthContext.Provider>;
 }
 
-export function useAuthContext(): AuthStore {
+export function useAuthContext() {
   const ctx = useContext(AuthContext);
-  if (!ctx) {
-    throw new Error("useAuthContext must be used within <AuthProvider>");
-  }
+  if (!ctx) throw new Error("useAuthContext must be used within <AuthProvider>");
   return ctx;
 }
-

@@ -10,7 +10,13 @@ export default function QuestionsForm() {
   const router = useRouter();
   const [step, setStep] = useState<1 | 2>(1);
   const [quick, setQuick] = useState<Quick>({ gender: "", animalProtein: "" });
-  const [detail, setDetail] = useState<Detail>({ dietary: "", conditions: "", medication: "", supplements: "", goals: "" });
+  const [detail, setDetail] = useState<Detail>({
+    dietary: "",
+    conditions: "",
+    medication: "",
+    supplements: "",
+    goals: "",
+  });
 
   const saveAndGo = () => {
     localStorage.setItem("onboarding.quick", JSON.stringify(quick));
@@ -27,17 +33,28 @@ export default function QuestionsForm() {
 
   if (step === 1) {
     return (
-      <div className="rounded-2xl border overflow-hidden max-w-sm">
-        <img src="/images/cooking.png" alt="Cooking" className="h-56 w-full object-cover object-center" />
+      <div className="rounded-2xl border overflow-hidden max-w-4xl mx-auto w-full">
+        <img
+          src="/images/cooking.png"
+          alt="Cooking"
+          className="h-96 md:h-[28rem] w-full object-cover object-center"
+        />
 
-        <div className="p-5 grid gap-5">
-          <h2 className="font-serif text-xl font-semibold">Let’s know more about you</h2>
+        <div className="px-10 py-8 grid gap-6">
+          <h2 className="font-headline text-3xl md:text-4xl leading-snug font-bold">
+            Let’s know more about you
+          </h2>
 
           <fieldset className="grid gap-2">
             <legend className="text-sm font-medium">Gender</legend>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3">
               {(["Male", "Female"] as const).map((g) => (
-                <button key={g} type="button" onClick={() => setQuick((s) => ({ ...s, gender: g }))} className={pill(quick.gender === g)}>
+                <button
+                  key={g}
+                  type="button"
+                  onClick={() => setQuick((s) => ({ ...s, gender: g }))}
+                  className={pill(quick.gender === g)}
+                >
                   {g}
                 </button>
               ))}
@@ -46,10 +63,17 @@ export default function QuestionsForm() {
 
           <fieldset className="grid gap-2">
             <legend className="text-sm font-medium">Do you eat animal protein?</legend>
-            <p className="text-xs text-gray-500 -mt-1">Including meat, fish, seafood, dairy, and eggs.</p>
-            <div className="grid grid-cols-2 gap-2">
+            <p className="text-xs text-gray-500 -mt-1">
+              Including meat, fish, seafood, dairy, and eggs.
+            </p>
+            <div className="grid grid-cols-2 gap-3">
               {(["Yes", "No"] as const).map((v) => (
-                <button key={v} type="button" onClick={() => setQuick((s) => ({ ...s, animalProtein: v }))} className={pill(quick.animalProtein === v)}>
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setQuick((s) => ({ ...s, animalProtein: v }))}
+                  className={pill(quick.animalProtein === v)}
+                >
                   {v}
                 </button>
               ))}
@@ -57,10 +81,18 @@ export default function QuestionsForm() {
           </fieldset>
 
           <div className="flex items-center justify-between">
-            <button className="text-[15px] text-[var(--color-primary)] underline underline-offset-2" onClick={() => router.push("/dashboard")} type="button">
+            <button
+              className="text-[15px] text-[var(--color-primary)] underline underline-offset-2"
+              onClick={() => router.push("/dashboard")}
+              type="button"
+            >
               Skip for now
             </button>
-            <button className="h-11 rounded-md bg-[var(--color-primary)] px-4 text-white text-[15px] font-medium" onClick={() => setStep(2)} type="button">
+            <button
+              className="h-12 rounded-md bg-[var(--color-primary)] px-6 text-white text-[15px] font-semibold"
+              onClick={() => setStep(2)}
+              type="button"
+            >
               Continue questionnaire
             </button>
           </div>
@@ -71,16 +103,22 @@ export default function QuestionsForm() {
 
   // step 2 – “Non required questions”
   return (
-    <div className="rounded-2xl border overflow-hidden max-w-sm">
-      <img src="/images/cooking.png" alt="Cooking" className="h-56 w-full object-cover object-center" />
+    <div className="rounded-2xl border overflow-hidden max-w-4xl mx-auto w-full">
+      <img
+        src="/images/cooking.png"
+        alt="Cooking"
+        className="h-96 md:h-[28rem] w-full object-cover object-center"
+      />
 
-      <div className="p-5 grid gap-4">
-        <h2 className="font-serif text-xl font-semibold">Let’s know more about you</h2>
+      <div className="px-10 py-8 grid gap-5">
+        <h2 className="font-headline text-3xl md:text-4xl leading-snug font-bold">
+          Let’s know more about you
+        </h2>
 
         <label className="grid gap-1">
           <span className="text-sm font-medium">Dietary restrictions and allergens</span>
           <textarea
-            className="min-h-24 rounded-md border border-gray-300 p-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25 focus:border-[var(--color-primary)]"
+            className="min-h-28 rounded-md border border-gray-300 p-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25 focus:border-[var(--color-primary)]"
             placeholder="Type any dietary restrictions here"
             value={detail.dietary}
             onChange={(e) => setDetail((s) => ({ ...s, dietary: e.target.value }))}
@@ -90,7 +128,7 @@ export default function QuestionsForm() {
         <label className="grid gap-1">
           <span className="text-sm font-medium">Medical Conditions</span>
           <textarea
-            className="min-h-24 rounded-md border border-gray-300 p-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25 focus:border-[var(--color-primary)]"
+            className="min-h-28 rounded-md border border-gray-300 p-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25 focus:border-[var(--color-primary)]"
             placeholder="Type any medical conditions here"
             value={detail.conditions}
             onChange={(e) => setDetail((s) => ({ ...s, conditions: e.target.value }))}
@@ -100,7 +138,7 @@ export default function QuestionsForm() {
         <label className="grid gap-1">
           <span className="text-sm font-medium">Medication</span>
           <textarea
-            className="min-h-24 rounded-md border border-gray-300 p-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25 focus:border-[var(--color-primary)]"
+            className="min-h-28 rounded-md border border-gray-300 p-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25 focus:border-[var(--color-primary)]"
             placeholder="Type any medication here"
             value={detail.medication}
             onChange={(e) => setDetail((s) => ({ ...s, medication: e.target.value }))}
@@ -110,7 +148,7 @@ export default function QuestionsForm() {
         <label className="grid gap-1">
           <span className="text-sm font-medium">Supplements</span>
           <textarea
-            className="min-h-24 rounded-md border border-gray-300 p-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25 focus:border-[var(--color-primary)]"
+            className="min-h-28 rounded-md border border-gray-300 p-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25 focus:border-[var(--color-primary)]"
             placeholder="Type any supplements here"
             value={detail.supplements}
             onChange={(e) => setDetail((s) => ({ ...s, supplements: e.target.value }))}
@@ -120,7 +158,7 @@ export default function QuestionsForm() {
         <label className="grid gap-1">
           <span className="text-sm font-medium">Health goals</span>
           <textarea
-            className="min-h-24 rounded-md border border-gray-300 p-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25 focus:border-[var(--color-primary)]"
+            className="min-h-28 rounded-md border border-gray-300 p-3 text-[15px] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25 focus:border-[var(--color-primary)]"
             placeholder="Type your goals"
             value={detail.goals}
             onChange={(e) => setDetail((s) => ({ ...s, goals: e.target.value }))}
@@ -128,10 +166,18 @@ export default function QuestionsForm() {
         </label>
 
         <div className="flex items-center justify-between">
-          <button className="text-[15px] text-[var(--color-primary)] underline underline-offset-2" onClick={() => router.push("/dashboard")} type="button">
+          <button
+            className="text-[15px] text-[var(--color-primary)] underline underline-offset-2"
+            onClick={() => router.push("/dashboard")}
+            type="button"
+          >
             Skip for now
           </button>
-          <button className="h-11 rounded-md bg-[var(--color-primary)] px-4 text-white text-[15px] font-medium" onClick={saveAndGo} type="button">
+          <button
+            className="h-12 rounded-md bg-[var(--color-primary)] px-6 text-white text-[15px] font-semibold"
+            onClick={saveAndGo}
+            type="button"
+          >
             Continue
           </button>
         </div>

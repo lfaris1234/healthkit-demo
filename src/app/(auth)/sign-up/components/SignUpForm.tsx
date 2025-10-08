@@ -106,8 +106,8 @@ export default function SignUpForm() {
 
   return (
     <form onSubmit={submit} className="grid gap-3 rounded-xl border p-4 sm:p-6">
-      <h3 className="text-lg font-semibold">Sign up</h3>
-      <p> Create your accoutn to know your score. </p>
+      <h3 className="font-headline text-2xl leading-snug font-bold">Sign up</h3>
+      <p> Create your account to know your score. </p>
 
       <label className="grid gap-1">
         <span className="text-sm text-gray-700">Name</span>
