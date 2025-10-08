@@ -3,11 +3,26 @@
   "private": true,
   "version": "1.0.0",
   "author": "Lily Faris <lilymfaris@gmail.com>",
-
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "dependencies": {
+    "axios": "^1.12.2",
+    "next": "15.5.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@next/swc-darwin-arm64": "15.5.4",
+    "@types/node": "^24.7.0",
+    "@types/react": "^19.2.2",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "3.4.13",
+    "typescript": "^5.9.3"
   }
 }

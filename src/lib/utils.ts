@@ -1,1 +1,3 @@
-export const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
+export function cn(...xs: Array<string | false | null | undefined>) {
+  return xs.filter(Boolean).join(" ");
+}

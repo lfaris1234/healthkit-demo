@@ -1,28 +1,34 @@
 import Link from "next/link";
 
-export default function Home() {
+export default function WelcomeHero() {
   return (
-    <div className="flex flex-col items-center text-center gap-6">
-      <img src="/placeholder.jpg" alt="wellness" className="h-40 w-40 rounded-xl object-cover" />
-      <h1 className="text-3xl font-semibold">Take control of your health</h1>
-      <p className="text-gray-600">
-        Personalized insights, recipes, and kit tracking—designed for everyday habits.
-      </p>
-
-      <div className="flex gap-3">
-        <Link
-          href="/(auth)/sign-up"
-          className="rounded-md bg-[var(--color-primary)] px-4 py-2 text-white"
-        >
-          Get Started
-        </Link>
-        <Link
-          href="/(auth)/login"
-          className="rounded-md border px-4 py-2 text-[var(--color-primary)] border-[var(--color-primary)]"
-        >
-          I already have an account
-        </Link>
+    <section className="rounded-xl overflow-hidden border">
+      <div className="grid grid-cols-1">
+        <img
+          src="/images/hero.png"
+          alt="fresh produce"
+          className="h-48 w-full object-cover"
+        />
+        <div className="bg-[var(--color-primary)] text-white p-4">
+          <h2 className="text-xl font-semibold leading-snug">
+            Take control of your health by measuring what matters
+          </h2>
+          <div className="mt-3 grid gap-2">
+            <Link
+              href="/login"
+              className="h-10 w-full rounded-md bg-white/95 text-[var(--color-primary)] grid place-items-center"
+            >
+              Log in with account
+            </Link>
+            <Link
+              href="/sign-up"
+              className="h-10 w-full rounded-md bg-white/15 border border-white/40 grid place-items-center"
+            >
+              Sign up today
+            </Link>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

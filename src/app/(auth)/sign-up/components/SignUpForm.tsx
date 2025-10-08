@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { api } from "@/lib/api";
 import { useAuthContext } from "@/context/AuthContext";
 
 type Form = {
@@ -47,20 +46,59 @@ export default function SignUpForm() {
     return Object.keys(e).length === 0;
   };
 
+  async function callSignupAPI(payload: { name: string; email: string }) {
+    // 4s timeout so it can’t hang
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), 4000);
+
+    try {
+      const res = await fetch("/api/auth/sign-up", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return (await res.json()) as { user: { id: string; name: string; email: string } };
+    } finally {
+      clearTimeout(id);
+    }
+  }
+
   const submit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     if (!validate()) return;
     setLoading(true);
+    setErrors({});
+
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim().toLowerCase(),
+    };
+
     try {
-      const res = await api.post("/auth/sign-up", {
-        name: form.name.trim(),
-        email: form.email.trim().toLowerCase(),
-      });
-      // store demo user in client state
-      setUser(res.data.user);
+      // Try the API; if it fails/aborts, fall back to local demo user
+      let user: { id: string; name: string; email: string };
+      try {
+        const data = await callSignupAPI(payload);
+        user = data.user;
+      } catch (apiErr) {
+        // soft-fail: make a local demo user so the flow continues
+        user = { id: crypto.randomUUID(), name: payload.name, email: payload.email };
+        // show a tiny notice but still proceed
+        setErrors({ email: "Network issue — continuing in demo mode." });
+      }
+
+      setUser(user);
+
+      // persist name into shared profile for dashboard greeting
+      const existingProfile = JSON.parse(localStorage.getItem("profile") || "{}");
+      localStorage.setItem("profile", JSON.stringify({ ...existingProfile, name: user.name }));
+
+      // always go to the next step
       router.push("/onboarding/non-required-questions");
     } catch (err) {
-      setErrors({ email: "This email may already be registered" });
+      setErrors({ email: "Something went wrong. Please try again." });
     } finally {
       setLoading(false);
     }
@@ -68,7 +106,8 @@ export default function SignUpForm() {
 
   return (
     <form onSubmit={submit} className="grid gap-3 rounded-xl border p-4 sm:p-6">
-      <h3 className="text-lg font-semibold">Create your account</h3>
+      <h3 className="text-lg font-semibold">Sign up</h3>
+      <p> Create your accoutn to know your score. </p>
 
       <label className="grid gap-1">
         <span className="text-sm text-gray-700">Name</span>
@@ -126,15 +165,17 @@ export default function SignUpForm() {
       {errors.agree && <span className="text-xs text-red-600">{errors.agree}</span>}
 
       <button
+        type="submit"
         disabled={loading}
         className="mt-2 rounded-md bg-[var(--color-primary)] px-4 py-2 text-white disabled:opacity-60"
       >
         {loading ? "Creating account..." : "Create account"}
       </button>
 
-      <p className="text-xs text-gray-500">
-        By continuing you agree to our Terms and acknowledge our Privacy Policy.
-      </p>
+      {/* small inline notice for soft-fail → still navigates */}
+      {"network" in errors && (
+        <p className="text-xs text-amber-600">{errors.network}</p>
+      )}
     </form>
   );
 }
